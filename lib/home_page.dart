@@ -10,6 +10,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<MaterialColor> _color = [
+    Colors.deepOrange,
+    Colors.red,
+    Colors.green,
+    Colors.purple,
+    Colors.brown
+  ];
+
   Future<List<Data>> getAllData() async {
     var api = "https://jsonplaceholder.typicode.com/photos";
     var data = await Http.get(api);
@@ -99,6 +107,7 @@ class _HomeState extends State<Home> {
                         shrinkWrap: true,
                         physics: ClampingScrollPhysics(),
                         itemBuilder: (BuildContext c, int index) {
+                          MaterialColor _mcolor = _color[index % _color.length];
                           return Card(
                               elevation: 10,
                               child: Column(
@@ -118,6 +127,8 @@ class _HomeState extends State<Home> {
                                               child: CircleAvatar(
                                             child: Text(snapshot.data[index].id
                                                 .toString()),
+                                            backgroundColor: _mcolor,
+                                            foregroundColor: Colors.white,
                                           )),
                                           SizedBox(width: 6),
                                           Container(
@@ -135,7 +146,36 @@ class _HomeState extends State<Home> {
                         },
                       );
                     }
-                  }))
+                  })),
+          SizedBox(height: 7),
+          Container(
+            margin: EdgeInsets.all(10),
+            height: MediaQuery.of(context).size.height,
+            child: FutureBuilder(
+              future: getAllData(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Card(
+                      elevation: 7.0,
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                              flex: 1,
+                              child: Image.network(
+                                snapshot.data[index].url,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              )),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          )
         ],
       ),
     );
