@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_json/DetailPage.dart';
 import 'package:flutter_json/model/data.dart';
 import 'package:http/http.dart' as Http;
 import 'dart:convert';
@@ -24,7 +25,7 @@ class _HomeState extends State<Home> {
     var jsonData = json.decode(data.body);
     List<Data> listOf = [];
     for (var i in jsonData) {
-      Data data = new Data(i["id"], i["url"], i["thumbnail"], i["title"]);
+      Data data = new Data(i["id"], i["url"], i["thumbnailUrl"], i["title"]);
       listOf.add(data);
     }
     return listOf;
@@ -113,7 +114,8 @@ class _HomeState extends State<Home> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  Image.network(snapshot.data[index].url,
+                                  Image.network(
+                                      snapshot.data[index].thumbnailUrl,
                                       height: 150,
                                       width: 150,
                                       fit: BoxFit.cover),
@@ -154,28 +156,63 @@ class _HomeState extends State<Home> {
             child: FutureBuilder(
               future: getAllData(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
-                return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      elevation: 7.0,
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              flex: 1,
-                              child: Image.network(
-                                snapshot.data[index].url,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              )),
-                        ],
-                      ),
-                    );
-                  },
-                );
+                if (snapshot.data == null) {
+                  return Center(
+                      child: Container(child: Text("Loading. data..")));
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      MaterialColor _mcolor = _color[index % _color.length];
+                      return Card(
+                        elevation: 7.0,
+                        child: Container(
+                          height: 90,
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                  flex: 1,
+                                  child: Image.network(
+                                    snapshot.data[index].thumbnailUrl,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  )),
+                              SizedBox(width: 6),
+                              Expanded(
+                                flex: 2,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) {
+                                      return Detail(snapshot.data[index]);
+                                    }));
+                                  },
+                                  child: Text(
+                                    snapshot.data[index].title,
+                                    maxLines: 2,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                  flex: 1,
+                                  child: CircleAvatar(
+                                    child: Text(
+                                        snapshot.data[index].id.toString()),
+                                    backgroundColor: _mcolor,
+                                    foregroundColor: Colors.white,
+                                  )),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
               },
             ),
-          )
+          ),
         ],
       ),
     );

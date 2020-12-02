@@ -2,6 +2,6 @@ import 'dart:convert';
 
 class Data {
   int id;
-  String url, thumbnail, title;
-  Data(this.id, this.url, this.thumbnail, this.title);
+  String url, thumbnailUrl, title;
+  Data(this.id, this.url, this.thumbnailUrl, this.title);
 }
