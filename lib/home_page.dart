@@ -161,54 +161,49 @@ class _HomeState extends State<Home> {
                       child: Container(child: Text("Loading. data..")));
                 } else {
                   return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      MaterialColor _mcolor = _color[index % _color.length];
-                      return Card(
-                        elevation: 7.0,
-                        child: Container(
-                          height: 90,
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                  flex: 1,
-                                  child: Image.network(
-                                    snapshot.data[index].thumbnailUrl,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                  )),
-                              SizedBox(width: 6),
-                              Expanded(
-                                flex: 2,
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) {
-                                      return Detail(snapshot.data[index]);
-                                    }));
-                                  },
-                                  child: Text(
-                                    snapshot.data[index].title,
-                                    maxLines: 2,
-                                    style: TextStyle(fontSize: 16),
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        MaterialColor _mcolor = _color[index % _color.length];
+                        return Card(
+                            elevation: 7.0,
+                            child: Container(
+                                height: 90,
+                                child: Row(children: <Widget>[
+                                  Expanded(
+                                      flex: 1,
+                                      child: Image.network(
+                                        snapshot.data[index].thumbnailUrl,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                      )),
+                                  SizedBox(width: 6),
+                                  Expanded(
+                                    flex: 2,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(builder:
+                                                (BuildContext context) {
+                                          return Detail(snapshot.data[index]);
+                                        }));
+                                      },
+                                      child: Text(
+                                        snapshot.data[index].title,
+                                        maxLines: 2,
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Expanded(
-                                  flex: 1,
-                                  child: CircleAvatar(
-                                    child: Text(
-                                        snapshot.data[index].id.toString()),
-                                    backgroundColor: _mcolor,
-                                    foregroundColor: Colors.white,
-                                  )),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                                  Expanded(
+                                      flex: 1,
+                                      child: CircleAvatar(
+                                        child: Text(
+                                            snapshot.data[index].id.toString()),
+                                        backgroundColor: _mcolor,
+                                        foregroundColor: Colors.white,
+                                      ))
+                                ])));
+                      });
                 }
               },
             ),
